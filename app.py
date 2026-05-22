@@ -503,14 +503,9 @@ def main():
     """, unsafe_allow_html=True)
     
     with st.sidebar:
-        st.header("⚙️ Configuration")
+        st.header("OfficeFlowAI")
+        st.image("OfficeFlow Ai-01-01.png", width=120)
         
-        if not GEMINI_API_KEY:
-            st.error("❌ GEMINI_API_KEY not found")
-            st.info("Create .env file with: GEMINI_API_KEY=your_key")
-            st.stop()
-        else:
-            st.success("✅ Gemini API Ready")
         
         st.divider()
         
