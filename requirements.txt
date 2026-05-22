@@ -1,0 +1,8 @@
+streamlit
+pandas
+PyPDF2
+openpyxl
+google-genai
+PyMuPDF
+pillow
+watchdog
