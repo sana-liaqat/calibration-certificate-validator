@@ -902,17 +902,33 @@ def main():
                 status_text.text("✅ Processing complete!")
                 
                 st.subheader("📊 Results Summary")
-                
+
                 results_data = []
                 for r in all_results:
+                    # Get days remaining
+                    days_left = r.get('days_left')
+                    if days_left is not None:
+                        if days_left < 0:
+                            days_display = f"🔴 Expired ({abs(days_left)} days overdue)"
+                        elif days_left <= 7:
+                            days_display = f"🔴 {days_left} days left"
+                        elif days_left <= 30:
+                            days_display = f"🟠 {days_left} days left"
+                        elif days_left <= 60:
+                            days_display = f"🟡 {days_left} days left"
+                        else:
+                            days_display = f"🟢 {days_left} days left"
+                    else:
+                        days_display = 'N/A'
+                    
                     results_data.append({
                         'File': r['filename'],
                         'Certificate No': r.get('certificate_number', 'N/A'),
                         'Page': r.get('page_num', 'N/A'),
                         'Status': '✅ Found' if r.get('found_in_master') else '❌ Not Found',
-                        'Expiry': r.get('expiry_status', ''),
                         'Instrument': r.get('instrument', ''),
-                        'Due Date': r.get('due_date', '')
+                        'Due Date': r.get('due_date', ''),
+                        'Days Remaining': days_display
                     })
                 
                 results_df = pd.DataFrame(results_data)
