@@ -907,30 +907,43 @@ def main():
                 for r in all_results:
                     # Get days remaining
                     days_left = r.get('days_left')
+                    expiry_status = r.get('expiry_status', 'N/A')
+                    
+                    # Format days remaining display
                     if days_left is not None:
                         if days_left < 0:
-                            days_display = f"🔴 Expired ({abs(days_left)} days overdue)"
+                            days_display = f"🔴 {days_left} days"
+                            expiry_display = f"{expiry_status}"
+                        elif days_left == 0:
+                            days_display = f"🔴 0 days"
+                            expiry_display = f"{expiry_status}"
                         elif days_left <= 7:
-                            days_display = f"🔴 {days_left} days left"
+                            days_display = f"{days_left} days"
+                            expiry_display = f"🔴 {expiry_status}"
                         elif days_left <= 30:
-                            days_display = f"🟠 {days_left} days left"
+                            days_display = f"🟠 {days_left} days"
+                            expiry_display = f"{expiry_status}"
                         elif days_left <= 60:
-                            days_display = f"🟡 {days_left} days left"
+                            days_display = f"🟡 {days_left} days"
+                            expiry_display = f"{expiry_status}"
                         else:
-                            days_display = f"🟢 {days_left} days left"
+                            days_display = f"🟢 {days_left} days"
+                            expiry_display = f"{expiry_status}"
                     else:
                         days_display = 'N/A'
+                        expiry_display = '⚪ No Date'
                     
                     results_data.append({
                         'File': r['filename'],
                         'Certificate No': r.get('certificate_number', 'N/A'),
                         'Page': r.get('page_num', 'N/A'),
                         'Status': '✅ Found' if r.get('found_in_master') else '❌ Not Found',
+                        'Expiry Status': expiry_display,
+                        'Days Remaining': days_display,
                         'Instrument': r.get('instrument', ''),
-                        'Due Date': r.get('due_date', ''),
-                        'Days Remaining': days_display
+                        'Due Date': r.get('due_date', '')
                     })
-                
+                                
                 results_df = pd.DataFrame(results_data)
                 st.dataframe(results_df, use_container_width=True, hide_index=True)
                 
